@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PrivLink</string>
+    <string name="relay_label">PrivLink で開く</string>
+
+    <string name="intro">プライバシーモード内で受け取ったリンクを、同じプライバシーモード内のブラウザへ転送します。システムの「どのブラウザで開くか」の判定を通さず、選んだブラウザをパッケージ名で直接起動します。</string>
+
+    <string name="status_none">転送先: なし（このプロファイル内にブラウザが見つかりません）</string>
+    <string name="status_auto">転送先: %1$s（自動選択）</string>
+    <string name="status_saved">転送先: %1$s（手動設定）</string>
+    <string name="role_held">デフォルトブラウザ: このアプリ</string>
+    <string name="role_not_held">デフォルトブラウザ: 別のアプリ／未設定</string>
+
+    <string name="section_target">転送先ブラウザ（このプロファイル内で検出されたもの）</string>
+    <string name="btn_clear">自動選択に戻す</string>
+
+    <string name="section_role">デフォルトブラウザにする（試験用）</string>
+    <string name="role_help">プライバシーモード側がプロファイル内のデフォルトブラウザを尊重する場合、これだけでリンクのタップが自動的に転送先ブラウザで開くようになります。設定後もメイン側の Chrome が開く場合、プライバシーモードが http(s) を強制的にメイン側へ回しているので、「共有」またはテキスト選択メニューから使ってください。</string>
+    <string name="btn_request_role">このアプリをデフォルトブラウザに申請</string>
+    <string name="role_unavailable">この環境ではブラウザロールを変更できません</string>
+    <string name="role_granted">デフォルトブラウザに設定されました</string>
+    <string name="role_denied">設定されませんでした</string>
+
+    <string name="section_test">動作テスト</string>
+    <string name="btn_test">example.com を転送先で開く</string>
+
+    <string name="usage">使い方\n1. リンクを長押し →「共有」→「PrivLink で開く」\n2. または URL テキストを選択 → ツールバーの「PrivLink で開く」\n3. 初回は vivo の「“PrivLink” オープン希望 “Chrome Beta”」ダイアログで「常にオープン」を選ぶと以後は確認なしで開きます。</string>
+
+    <string name="no_url">URL が見つかりませんでした</string>
+    <string name="target_failed">%1$s を起動できませんでした。候補から選んでください</string>
+    <string name="choose_browser">開くブラウザを選択</string>
+    <string name="no_browser">このプロファイル内にブラウザがありません</string>
+</resources>
