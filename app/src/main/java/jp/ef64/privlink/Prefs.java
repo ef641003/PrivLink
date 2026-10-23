@@ -27,7 +27,18 @@ final class Prefs {
             "com.kiwibrowser.browser",
     };
 
+    private static final String KEY_DL_TREE = "download_tree";
+
     private Prefs() {}
+
+    /** ダウンロード先フォルダ（SAF のツリー URI）。未設定なら null＝毎回保存先を確認する。 */
+    static String getDownloadTree(Context c) {
+        return prefs(c).getString(KEY_DL_TREE, null);
+    }
+
+    static void setDownloadTree(Context c, String uri) {
+        prefs(c).edit().putString(KEY_DL_TREE, uri).apply();
+    }
 
     static String getSaved(Context c) {
         return prefs(c).getString(KEY_TARGET, null);

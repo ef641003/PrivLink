@@ -75,6 +75,14 @@ public class RelayActivity extends Activity {
     }
 
     private boolean openWith(Uri uri, String pkg) {
+        if (getPackageName().equals(pkg)) {
+            // 転送先が「内蔵ブラウザ」: 自分のブラウザ画面を直接開く
+            startActivity(new Intent(this, BrowserActivity.class)
+                    .setAction(Intent.ACTION_VIEW)
+                    .setData(uri)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            return true;
+        }
         Intent i = new Intent(Intent.ACTION_VIEW, uri)
                 .setPackage(pkg)
                 .addCategory(Intent.CATEGORY_BROWSABLE)

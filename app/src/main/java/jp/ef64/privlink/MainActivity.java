@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -19,6 +20,7 @@ import java.util.List;
 public class MainActivity extends Activity {
 
     private static final int REQ_ROLE = 1;
+    private static final int REQ_TREE = 2;
 
     private TextView status;
     private RadioGroup group;
@@ -42,6 +44,27 @@ public class MainActivity extends Activity {
             startActivity(i);
         });
 
+        findViewById(R.id.btn_open_browser).setOnClickListener(v ->
+                startActivity(new Intent(this, BrowserActivity.class)));
+
+        findViewById(R.id.btn_pick_dir).setOnClickListener(v -> {
+            Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                            | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+                            | Intent.FLAG_GRANT_PREFIX_URI_PERMISSION);
+            try {
+                startActivityForResult(i, REQ_TREE);
+            } catch (Exception e) {
+                Toast.makeText(this, R.string.dl_no_picker, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        findViewById(R.id.btn_clear_dir).setOnClickListener(v -> {
+            Prefs.setDownloadTree(this, null);
+            refresh();
+        });
+
         Button clear = findViewById(R.id.btn_clear);
         clear.setOnClickListener(v -> {
             Prefs.save(this, null);
@@ -63,6 +86,11 @@ public class MainActivity extends Activity {
 
         group.setOnCheckedChangeListener(null);
         group.removeAllViews();
+        RadioButton self = new RadioButton(this);
+        self.setText(getString(R.string.builtin_browser) + "\n" + getPackageName());
+        self.setTag(getPackageName());
+        self.setChecked(getPackageName().equals(current));
+        group.addView(self);
         for (ResolveInfo ri : browsers) {
             String pkg = ri.activityInfo.packageName;
             RadioButton rb = new RadioButton(this);
@@ -80,6 +108,12 @@ public class MainActivity extends Activity {
         });
 
         status.setText(statusText(current, saved));
+
+        TextView dir = findViewById(R.id.download_dir);
+        String tree = Prefs.getDownloadTree(this);
+        dir.setText(tree == null
+                ? getString(R.string.dl_dir_none)
+                : getString(R.string.dl_dir_set, DocumentsContract.getTreeDocumentId(Uri.parse(tree))));
     }
 
     private String statusText(String current, String saved) {
@@ -115,6 +149,18 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_TREE && resultCode == RESULT_OK && data != null
+                && data.getData() != null) {
+            Uri tree = data.getData();
+            try {
+                getContentResolver().takePersistableUriPermission(tree,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                Prefs.setDownloadTree(this, tree.toString());
+            } catch (SecurityException e) {
+                Toast.makeText(this, R.string.dl_perm_failed, Toast.LENGTH_LONG).show();
+            }
+            refresh();
+        }
         if (requestCode == REQ_ROLE) {
             Toast.makeText(this,
                     resultCode == RESULT_OK ? R.string.role_granted : R.string.role_denied,

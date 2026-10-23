@@ -10,8 +10,8 @@ android {
         applicationId = "jp.ef64.privlink"
         minSdk = 29   // RoleManager（デフォルトブラウザ申請）と DayNight テーマが API 29 以降のため
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
     }
 
     buildTypes {
