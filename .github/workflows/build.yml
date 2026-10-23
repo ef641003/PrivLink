@@ -1,6 +1,5 @@
-# GitHub にこのプロジェクトを push すると、自動で debug APK をビルドして
-# Actions の「Artifacts」からダウンロードできるようにするワークフロー。
-# Android Studio を入れなくても APK が手に入る。
+# push すると debug APK をビルドし、Actions の「Artifacts」からダウンロードできる。
+# Android SDK は Ubuntu 24.04 ランナーに標準で入っているため、別途セットアップは不要。
 name: Build APK
 
 on:
@@ -9,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -18,14 +17,12 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - uses: android-actions/setup-android@v3
-
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.9"
 
       - name: Build debug APK
-        run: gradle assembleDebug --no-daemon
+        run: gradle assembleDebug --no-daemon --stacktrace
 
       - uses: actions/upload-artifact@v4
         with:
