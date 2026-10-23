@@ -37,6 +37,24 @@ vivo OriginOS のプライバシーモード（原子隐私系统）内でリン
 gradle assembleDebug
 ```
 
+### D. PC でビルド（Windows・Android Studio なしでも可）
+
+前提: JDK 17 以上と Android SDK（Android Studio を入れていれば同梱）。
+SDK の場所を `local.properties` に書く（Android Studio で開けば自動生成される）:
+
+```
+sdk.dir=C\\Users\\<ユーザー名>\\AppData\\Local\\Android\\Sdk
+```
+
+プロジェクトのフォルダで:
+
+```
+gradlew.bat assembleDebug
+```
+
+初回は Gradle 8.9 や Android のライブラリを自動ダウンロードするので数分かかる。
+`app\build\outputs\apk\debug\app-debug.apk` ができる。
+
 ## インストールと配置
 
 1. `app-debug.apk` を端末に転送してインストール（または PC から `adb install app-debug.apk`）。
