@@ -14,6 +14,18 @@ android {
         versionName = "1.1"
     }
 
+    // CI（GitHub Actions）は毎回まっさらな環境でビルドするため、標準のままだと署名の鍵が
+    // ビルドごとに変わり、更新インストールが「競合」で失敗する。固定の鍵で署名して防ぐ。
+    // （個人用のサイドロード APK 向けの debug 鍵。ストア配布には使わないこと）
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
     buildTypes {
         release {
             // 配布用に署名する場合は signingConfigs を追加する。個人利用なら debug ビルドで十分。
